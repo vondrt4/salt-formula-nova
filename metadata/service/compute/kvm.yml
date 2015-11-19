@@ -3,10 +3,13 @@ applications:
 classes:
 - service.nova.support
 parameters:
+  _param:
+    nova_networking: default
   nova:
     compute:
       version: ${_param:nova_version}
       enabled: true
+      networking: ${_param:nova_networking}
       virtualization: kvm
       heal_instance_info_cache_interval: 60
       vncproxy_url: http://${_param:cluster_vip_address}:6080
@@ -54,3 +57,5 @@ parameters:
           port: 11211
         - host: ${_param:cluster_node03_address}
           port: 11211
+      metadata:
+        password: metadataPass

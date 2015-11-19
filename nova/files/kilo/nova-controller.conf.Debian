@@ -104,6 +104,7 @@ neutron_metadata_proxy_shared_secret={{ controller.metadata.password }}
 {%- endif %}
 
 allow_resize_to_same_host=True
+start_guests_on_host_boot=True
 
 rpc_cast_timeout = 30
 rpc_conn_pool_size = 300
@@ -205,6 +206,7 @@ region_name= {{ controller.network.region }}
 {%- endif %}
 url=http://{{ controller.network.host }}:{{ controller.network.port }}
 
+metadata_proxy_shared_secret={{ controller.metadata.password }}
 service_metadata_proxy=True
 
 [cinder]
@@ -220,3 +222,4 @@ cross_az_attach={{ controller.cross_az_attach }}
 {{ key }}={{ value }}
 {%- endfor %}
 {%- endif %}
+

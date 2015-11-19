@@ -179,6 +179,11 @@ url=http://{{ compute.network.host }}:{{ compute.network.port }}
 extension_sync_interval={{ compute.network.get('extension_sync_interval', '600') }}
 region_name= {{ compute.network.region }}
 timeout=30
+{%- if compute.get('networking', 'default') != "contrail" %}
+metadata_proxy_shared_secret={{ compute.metadata.password }}
+service_metadata_proxy=True
+{%- endif %}
+
 
 [cinder]
 os_region_name = {{ compute.identity.region }}
