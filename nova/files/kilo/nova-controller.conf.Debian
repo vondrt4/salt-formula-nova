@@ -166,4 +166,8 @@ admin_username={{ controller.network.user }}
 {%- endif %}
 url=http://{{ controller.network.host }}:{{ controller.network.port }}
 
+{%- if controller.get('networking', 'default') != "contrail" %}
+metadata_proxy_shared_secret={{ controller.metadata.password }}
 service_metadata_proxy=True
+{%- endif %}
+

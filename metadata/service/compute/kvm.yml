@@ -1,10 +1,13 @@
 applications:
 - nova
 parameters:
+  _param:
+    nova_networking: default
   nova:
     compute:
       enabled: true
       version: ${_param:nova_version}
+      networking: ${_param:nova_networking}
       virtualization: kvm
       bind:
         vnc_address: ${linux:network:host:local:address}
@@ -39,3 +42,5 @@ parameters:
         engine: neutron
         host: ${linux:network:host:vip:address}
         port: 9696
+      metadata:
+        password: metadataPass
