@@ -171,3 +171,6 @@ metadata_proxy_shared_secret={{ controller.metadata.password }}
 service_metadata_proxy=True
 {%- endif %}
 
+[cinder]
+#temporary fix for kilo against "publicURL endpoint for volumev2 service named cinderv2 not found" in nova log
+catalog_info=volume:cinder:publicURL
