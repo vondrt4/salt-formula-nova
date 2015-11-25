@@ -223,3 +223,6 @@ cross_az_attach={{ controller.cross_az_attach }}
 {%- endfor %}
 {%- endif %}
 
+[cinder]
+#temporary fix for kilo against "publicURL endpoint for volumev2 service named cinderv2 not found" in nova log
+catalog_info=volume:cinder:publicURL
