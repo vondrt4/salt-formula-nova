@@ -132,3 +132,7 @@ admin_password={{ compute.network.password }}
 admin_tenant_name={{ compute.identity.tenant }}
 admin_auth_url=http://{{ compute.identity.host }}:{{ compute.identity.port }}/v2.0
 url=http://{{ compute.network.host }}:{{ compute.network.port }}
+
+[cinder]
+#temporary fix for kilo against "publicURL endpoint for volumev2 service named cinderv2 not found" in nova log
+catalog_info=volume:cinder:publicURL
