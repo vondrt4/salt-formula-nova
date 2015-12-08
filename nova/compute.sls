@@ -66,6 +66,11 @@ user_nova_bash:
   - require:
     - pkg: nova_compute_packages
 
+user_nova_shell:
+  user.present:
+    - name: nova
+    - shell: /bin/bash
+
 {%- endif %}
 
 {%- if not pillar.nova.get('controller',{}).get('enabled') %}
