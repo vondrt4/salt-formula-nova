@@ -55,6 +55,14 @@ nova_auth_keys:
   - require:
     - pkg: nova_compute_packages
 
+/var/lib/nova/.ssh/config:
+  file.managed:
+  - user: nova
+  - source: salt://nova/files/ssh-config
+  - mode: 400
+  - require:
+    - pkg: nova_compute_packages
+
 {%- endif %}
 
 {%- if pillar.nova.controller is not defined %}
