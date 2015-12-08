@@ -63,6 +63,11 @@ nova_auth_keys:
   - require:
     - pkg: nova_compute_packages
 
+user_nova_shell:
+  user.present:
+    - name: nova
+    - shell: /bin/bash
+
 {%- endif %}
 
 {%- if pillar.nova.controller is not defined %}
