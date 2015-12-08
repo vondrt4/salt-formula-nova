@@ -65,8 +65,13 @@ nova_auth_keys:
 
 user_nova_shell:
   user.present:
-    - name: nova
-    - shell: /bin/bash
+  - name: nova
+  - shell: /bin/bash
+  - groups:
+    {%- if salt['group.info']('libvirtd') %}
+    - libvirtd
+    {%- endif %}
+    - nova
 
 {%- endif %}
 
