@@ -118,6 +118,10 @@ notify_on_{{ key }} = {{ value }}
 
 {%- endif %}
 
+[libvirt]
+disk_cachemodes =file=writeback,network=writeback,block=none"
+hw_disk_discard = unmap
+
 {%- if compute.identity.get('version', 2) == 2 %}
 
 [keystone_authtoken]
