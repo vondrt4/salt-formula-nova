@@ -43,8 +43,6 @@ enabled_apis = ec2,osapi_compute,metadata
 
 my_ip={{ controller.bind.private_address }}
 
-
-
 neutron_auth_strategy = keystone
 neutron_admin_auth_url = http://{{ controller.identity.host }}:35357/v2.0
 {% if pillar.neutron is defined %}
@@ -58,7 +56,6 @@ neutron_admin_username={{ controller.network.user }}
 {%- endif %}
 neutron_url=http://{{ controller.network.host }}:{{ controller.network.port }}
 
-
 linuxnet_interface_driver = nova.network.linux_net.LinuxOVSInterfaceDriver
 firewall_driver = nova.virt.firewall.NoopFirewallDriver
 security_group_api = neutron
@@ -69,7 +66,6 @@ start_guests_on_host_boot=truembu
 {%- if controller.cache is defined %}
 memcached_servers={%- for member in controller.cache.members %}{{ member.host }}:11211{% if not loop.last %},{% endif %}{%- endfor %}
 {%- endif %}
-
 
 volume_api_class=nova.volume.cinder.API
 ec2_listen={{ controller.bind.private_address }}
@@ -95,7 +91,7 @@ neutron_metadata_proxy_shared_secret={{ controller.metadata.password }}
 {%- endif %}
 
 allow_resize_to_same_host=True
-start_guests_on_host_boot=true
+start_guests_on_host_boot=True
 
 rpc_cast_timeout = 30
 rpc_conn_pool_size = 300
@@ -105,6 +101,10 @@ report_interval = 5
 
 block_device_allocate_retries=600
 block_device_allocate_retries_interval=10
+
+scheduler_default_filters=AggregateInstanceExtraSpecsFilter,AggregateImagePropertiesIsolation,RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter
+aggregate_image_properties_isolation_namespace = aggregate
+aggregate_image_properties_isolation_separator = .
 
 [oslo_concurrency]
 
