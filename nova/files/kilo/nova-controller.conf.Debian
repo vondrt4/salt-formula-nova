@@ -72,6 +72,8 @@ security_group_api = neutron
 
 rpc_backend = nova.rpc.impl_kombu
 
+start_guests_on_host_boot=true
+
 {%- if controller.cache is defined %}
 memcached_servers={%- for member in controller.cache.members %}{{ member.host }}:11211{% if not loop.last %},{% endif %}{%- endfor %}
 {%- endif %}
@@ -83,6 +85,8 @@ osapi_compute_listen={{ controller.bind.private_address }}
 metadata_listen={{ controller.bind.private_address }}
 glance_host = {{ controller.glance.host }}
 osapi_compute_workers = {{ controller.workers }}
+metadata_workers = {{ controller.workers }}
+ec2_workers = {{ controller.workers }}
 
 #NoVNC
 vnc_enabled=true
@@ -111,7 +115,8 @@ report_interval = 5
 block_device_allocate_retries=600
 block_device_allocate_retries_interval=10
 
-scheduler_default_filters=AggregateInstanceExtraSpecsFilter,AggregateImagePropertiesIsolation,RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter
+scheduler_default_filters=AggregateInstanceExtraSpecsFilter,AggregateImagePropertiesIsolation,RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter
+#ComputeCapabilitiesFilter off because of conflict with AggregateInstanceExtraSpecFilter https://bugs.launchpad.net/nova/+bug/1279719
 aggregate_image_properties_isolation_namespace = aggregate
 aggregate_image_properties_isolation_separator = .
 
@@ -222,7 +227,3 @@ cross_az_attach={{ controller.cross_az_attach }}
 {{ key }}={{ value }}
 {%- endfor %}
 {%- endif %}
-
-[cinder]
-#temporary fix for kilo against "publicURL endpoint for volumev2 service named cinderv2 not found" in nova log
-catalog_info=volume:cinder:publicURL
