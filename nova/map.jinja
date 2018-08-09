@@ -7,7 +7,7 @@
 
 {% set controller = salt['grains.filter_by']({
     'Debian': {
-        'pkgs': ['nova-common', 'nova-consoleproxy', 'novnc', 'nova-api', 'nova-cert', 'nova-conductor', 'nova-consoleauth', 'nova-doc', 'nova-scheduler', 'python-novaclient', 'python-memcache', 'gettext-base', 'python-pycadf'],
+        'pkgs': ['nova-common', 'nova-novncproxy', 'novnc', 'nova-api', 'nova-cert', 'nova-conductor', 'nova-consoleauth', 'nova-doc', 'nova-scheduler', 'python-novaclient', 'python-memcache', 'gettext-base', 'python-pycadf'],
         'services': ['nova-api', 'nova-cert', 'nova-consoleauth', 'nova-scheduler', 'nova-conductor', 'nova-novncproxy'],
         'debug': false,
         'notification': false,
