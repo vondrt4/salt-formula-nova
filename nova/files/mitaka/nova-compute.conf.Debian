@@ -9,7 +9,6 @@ verbose=True
 api_paste_config=/etc/nova/api-paste.ini
 volumes_path=/var/lib/nova/volumes
 compute_manager=nova.compute.manager.ComputeManager
-network_device_mtu=65000
 use_neutron = True
 config_drive_format={{ compute.get('config_drive_format', compute.get('config_drive', {}).get('format', 'vfat')) }}
 config_drive_cdrom={{ compute.get('config_drive', {}).get('cdrom', False)|lower }}
@@ -122,7 +121,6 @@ disk_cachemodes="{{ compute.get('disk_cachemodes', 'network=writeback,block=none
 libvirt_inject_password=True
 block_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_NON_SHARED_INC
 live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST
-libvirt_inject_key=True
 inject_key=False
 vif_driver=nova.virt.libvirt.vif.LibvirtGenericVIFDriver
 
@@ -191,6 +189,8 @@ auth_type = password
 project_domain_name = default
 user_domain_name = default
 timeout=30
+metadata_proxy_shared_secret=metadataPass
+service_metadata_proxy=True
 
 [cinder]
 os_region_name = {{ compute.identity.region }}
