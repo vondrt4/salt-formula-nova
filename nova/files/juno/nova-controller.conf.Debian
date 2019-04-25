@@ -12,6 +12,7 @@ lock_path = /var/lib/nova/tmp
 volumes_dir = /etc/nova/volumes
 dhcpbridge = /usr/bin/nova-dhcpbridge
 dhcpbridge_flagfile = /etc/nova/nova.conf
+dhcp_domain = {{ controller.dhcp_domain }}
 force_dhcp_release = True
 injected_network_template = /usr/share/nova/interfaces.template
 libvirt_nonblocking = True
@@ -38,6 +39,8 @@ network_api_class = nova_contrail_vif.contrailvif.ContrailNetworkAPI
 {%- else %}
 network_api_class = nova.network.neutronv2.api.API
 {%- endif %}
+
+service_down_time = {{ controller.service_down_time|default('180') }}
 
 compute_driver = libvirt.LibvirtDriver
 libvirt_type=kvm
@@ -69,7 +72,6 @@ firewall_driver = nova.virt.firewall.NoopFirewallDriver
 security_group_api = neutron
 
 rpc_backend = nova.rpc.impl_kombu
-start_guests_on_host_boot=truembu
 
 {%- if controller.cache is defined %}
 memcached_servers={%- for member in controller.cache.members %}{{ member.host }}:11211{% if not loop.last %},{% endif %}{%- endfor %}
@@ -113,7 +115,6 @@ neutron_metadata_proxy_shared_secret={{ controller.metadata.password }}
 {%- endif %}
 
 allow_resize_to_same_host=True
-start_guests_on_host_boot=true
 
 rpc_cast_timeout = 30
 rpc_conn_pool_size = 300
@@ -150,3 +151,16 @@ db_retry_interval = 1
 connection_debug = 10
 pool_timeout = 120
 connection = {{ controller.database.engine }}://{{ controller.database.user }}:{{ controller.database.password }}@{{ controller.database.host }}/{{ controller.database.name }}
+
+[cinder]
+catalog_info=volumev2:cinderv2:internalURL
+{%- if controller.cross_az_attach is defined %}
+cross_az_attach={{ controller.cross_az_attach }}
+{%- endif %}
+
+{%- if controller.upgrade_levels is defined %}
+[upgrade_levels]
+{%- for key, value in controller.upgrade_levels.iteritems() %}
+{{ key }}={{ value }}
+{%- endfor %}
+{%- endif %}

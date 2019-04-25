@@ -7,28 +7,90 @@
 
 {% set controller = salt['grains.filter_by']({
     'Debian': {
-        'pkgs': ['nova-novncproxy', 'novnc', 'nova-api', 'nova-ajax-console-proxy', 'nova-cert', 'nova-conductor', 'nova-consoleauth', 'nova-doc', 'nova-scheduler', 'python-novaclient', 'python-memcache'],
+        'pkgs': ['nova-common', 'nova-novncproxy', 'novnc', 'nova-api', 'nova-cert', 'nova-conductor', 'nova-consoleauth', 'nova-doc', 'nova-scheduler', 'python-novaclient', 'python-memcache', 'gettext-base', 'python-pycadf'],
         'services': ['nova-api', 'nova-cert', 'nova-consoleauth', 'nova-scheduler', 'nova-conductor', 'nova-novncproxy'],
         'debug': false,
+        'notification': false,
+        'cors': {},
+        'audit': {
+          'enabled': false
+        },
     },
     'RedHat': {
-        'pkgs': ['openstack-nova-novncproxy', 'python-nova', 'openstack-nova-api', 'openstack-nova-console', 'openstack-nova-scheduler', 'python-novaclient', 'openstack-nova-common', 'openstack-nova-conductor', 'openstack-nova-cert'],
+        'pkgs': ['openstack-nova-novncproxy', 'python-nova', 'openstack-nova-api', 'openstack-nova-console', 'openstack-nova-scheduler', 'python-novaclient', 'openstack-nova-common', 'openstack-nova-conductor', 'openstack-nova-cert', 'python-pycadf'],
         'services': ['openstack-nova-api', 'openstack-nova-cert', 'openstack-nova-consoleauth', 'openstack-nova-scheduler', 'openstack-nova-conductor', 'openstack-nova-novncproxy'],
         'debug': false,
+        'notification': false,
+        'cors': {},
+        'audit': {
+          'enabled': false
+        },
     },
-}, merge=salt['pillar.get']('nova:controller')) %}
+}, merge=pillar.nova.get('controller', {})) %}
+
+
+{% set client = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': ['python-novaclient']
+    },
+    'RedHat': {
+        'pkgs': ['python-novaclient']
+    },
+}, merge=pillar.nova.get('client', {})) %}
 
 {% set compute = salt['grains.filter_by']({
     'Debian': {
-        'pkgs': ['nova-compute-kvm', 'python-novaclient', 'pm-utils', 'sysfsutils', 'sg3-utils', 'libvirt-bin', 'python-memcache', 'qemu-kvm','python-guestfs'],
-        'services': ['nova-compute', 'libvirt-bin'],
+        'pkgs': ['nova-common', 'nova-compute-kvm', 'python-novaclient', 'pm-utils', 'sysfsutils', 'sg3-utils', 'libvirt-bin', 'python-memcache', 'qemu-kvm','python-guestfs', 'gettext-base'],
+        'services': ['nova-compute'],
+        'libvirt_config': 'libvirtd.conf',
+        'libvirt_bin': '/etc/default/libvirt-bin',
+        'libvirt_service': 'libvirt-bin',
         'bind': compute_bind_defaults,
         'debug': false,
+        'libvirt': [],
+        'instances_path': '$state_path/instances',
+        'notification': false,
+        'availability_zone': None,
+        'aggregates': [],
+        'identity': {
+            'region': 'RegionOne'
+        },
+        'network': {
+            'region': 'RegionOne'
+        },
+        'heal_instance_info_cache_interval': '60',
     },
     'RedHat': {
         'pkgs': ['openstack-nova-compute', 'python-novaclient', 'python-nova', 'sysfsutils', 'sg3_utils'],
         'services': ['messagebus', 'openstack-nova-compute', 'libvirtd'],
+        'libvirt_config': 'libvirt.conf',
+        'libvirt_bin': '/etc/sysconfig/libvirtd',
+        'libvirt_service': 'libvirtd',
         'bind': compute_bind_defaults,
         'debug': false,
+        'libvirt': [],
+        'notification': false,
+        'availability_zone': None,
+        'identity': {
+            'region': 'RegionOne'
+        },
+        'network': {
+            'region': 'RegionOne'
+        },
+        'heal_instance_info_cache_interval': '60',
     },
-}, merge=salt['pillar.get']('nova:compute')) %}
+}, merge=pillar.nova.get('compute', {})) %}
+
+
+
+{% set monitoring = salt['grains.filter_by']({
+    'default': {
+        'disk': {
+              'warn': '15%',
+              'crit': '5%',
+        },
+        'error_log_rate': {
+              'warn': 0.2,
+        },
+    },
+}, grain='os_family', merge=salt['pillar.get']('nova:monitoring')) %}
