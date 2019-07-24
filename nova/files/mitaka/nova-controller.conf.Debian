@@ -16,6 +16,7 @@ injected_network_template = /usr/share/nova/interfaces.template
 libvirt_nonblocking = True
 vif_plugging_is_fatal = False
 vif_plugging_timeout = 0
+scheduler_host_subset_size = 10
 cpu_allocation_ratio = {{ controller.cpu_allocation_ratio }}
 ram_allocation_ratio = {{ controller.ram_allocation_ratio }}
 disk_allocation_ratio = {{ controller.disk_allocation_ratio }}

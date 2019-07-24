@@ -40,7 +40,7 @@
 
 {% set compute = salt['grains.filter_by']({
     'Debian': {
-        'pkgs': ['nova-common', 'nova-compute-kvm', 'python-novaclient', 'pm-utils', 'sysfsutils', 'sg3-utils', 'libvirt-bin', 'python-memcache', 'qemu-kvm','python-guestfs', 'gettext-base'],
+        'pkgs': ['nova-common', 'nova-compute', 'nova-compute-kvm', 'python-novaclient', 'pm-utils', 'sysfsutils', 'sg3-utils', 'libvirt-bin', 'python-memcache', 'qemu-kvm','python-guestfs', 'gettext-base', 'cgroup-lite'],
         'services': ['nova-compute'],
         'libvirt_config': 'libvirtd.conf',
         'libvirt_bin': '/etc/default/libvirt-bin',
